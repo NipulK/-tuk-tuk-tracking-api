@@ -1,24 +1,46 @@
 import mongoose from 'mongoose';
 
+const wait = (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
+  const maxRetries = Number(process.env.MONGO_CONNECT_RETRIES || 5);
+  const retryDelayMs = Number(process.env.MONGO_CONNECT_RETRY_DELAY_MS || 2000);
 
   if (!mongoUri) {
     throw new Error('MONGO_URI is not set in environment variables.');
   }
 
-  try {
-    const conn = await mongoose.connect(mongoUri);
+  for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
+    try {
+      const conn = await mongoose.connect(mongoUri);
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-    return conn;
-  } catch (error) {
-    if (error?.code === 'ENOTFOUND' || error?.message?.includes('querySrv ENOTFOUND')) {
-      console.error('MongoDB DNS lookup failed for your Atlas cluster host.');
-      console.error('Verify the cluster hostname in MONGO_URI and check your network/VPN DNS settings.');
+      console.log(`MongoDB Connected: ${conn.connection.host}`);
+      return conn;
+    } catch (error) {
+      const isDnsError = error?.code === 'ENOTFOUND' || error?.message?.includes('querySrv ENOTFOUND');
+
+      if (isDnsError) {
+        console.error('MongoDB DNS lookup failed for your Atlas cluster host.');
+        console.error('Verify the cluster hostname in MONGO_URI and check your network/VPN DNS settings.');
+      }
+
+      console.error(`MongoDB Connection Error: ${error.message}`);
+
+      if (attempt === maxRetries) {
+        throw error;
+      }
+
+      // Retry only DNS and temporary network errors, fail fast for config/auth errors.
+      if (!isDnsError && error?.name !== 'MongooseServerSelectionError') {
+        throw error;
+      }
+
+      console.error(`Retrying MongoDB connection (${attempt}/${maxRetries}) in ${retryDelayMs}ms...`);
+      await wait(retryDelayMs);
     }
-    console.error(`MongoDB Connection Error: ${error.message}`);
-    throw error;
   }
 };
 
