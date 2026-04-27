@@ -1,3 +1,4 @@
+import dns from 'node:dns';
 import mongoose from 'mongoose';
 
 const wait = (ms) => new Promise((resolve) => {
@@ -8,9 +9,22 @@ const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
   const maxRetries = Number(process.env.MONGO_CONNECT_RETRIES || 5);
   const retryDelayMs = Number(process.env.MONGO_CONNECT_RETRY_DELAY_MS || 2000);
+  const customDnsServers = process.env.MONGO_DNS_SERVERS;
 
   if (!mongoUri) {
     throw new Error('MONGO_URI is not set in environment variables.');
+  }
+
+  if (customDnsServers) {
+    const servers = customDnsServers
+      .split(',')
+      .map((server) => server.trim())
+      .filter(Boolean);
+
+    if (servers.length > 0) {
+      dns.setServers(servers);
+      console.log(`Using custom DNS servers for MongoDB lookup: ${servers.join(', ')}`);
+    }
   }
 
   for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
