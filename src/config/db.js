@@ -5,6 +5,7 @@ const wait = (ms) => new Promise((resolve) => {
   setTimeout(resolve, ms);
 });
 
+
 const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
   const maxRetries = Number(process.env.MONGO_CONNECT_RETRIES || 5);
