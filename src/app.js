@@ -19,7 +19,7 @@ app.use('/api/master-data', masterDataRoutes);
 // Vehicle routes should be added after authentication routes to ensure that they are protected by the authentication middleware.
 app.use('/api/vehicles', vehicleRoutes);
 // Location routes should be added after authentication routes to ensure that they are protected by the authentication middleware.
-app.use('/api/locations', locationRoutes);
+app.use('/api/location', locationRoutes);
 // Logging middleware should be added after CORS to ensure that all requests are logged, including those that may be blocked by CORS.
 app.use('/api/auth', authRoutes);
 app.use(morgan('dev'));
