@@ -1,16 +1,35 @@
-import express from 'express';
-import {
-  getProvinces,
-  getDistricts,
-  getPoliceStations
-} from '../controllers/masterDataController.js';
-import { protect } from '../middleware/authMiddleware.js';
-
-
-const router = express.Router();
-
+/**
+ * @swagger
+ * /api/master-data/provinces:
+ *   get:
+ *     summary: Get all provinces
+ *     tags: [Master Data]
+ *     responses:
+ *       200:
+ *         description: List of provinces
+ */
 router.get('/provinces', protect, getProvinces);
-router.get('/districts', protect, getDistricts);
-router.get('/police-stations', protect, getPoliceStations);
 
-export default router;
+/**
+ * @swagger
+ * /api/master-data/districts:
+ *   get:
+ *     summary: Get all districts
+ *     tags: [Master Data]
+ *     responses:
+ *       200:
+ *         description: List of districts
+ */
+router.get('/districts', protect, getDistricts);
+
+/**
+ * @swagger
+ * /api/master-data/police-stations:
+ *   get:
+ *     summary: Get all police stations
+ *     tags: [Master Data]
+ *     responses:
+ *       200:
+ *         description: List of police stations
+ */
+router.get('/police-stations', protect, getPoliceStations);
