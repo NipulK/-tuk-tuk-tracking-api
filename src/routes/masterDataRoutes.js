@@ -6,6 +6,7 @@ import {
 } from '../controllers/masterDataController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
+
 const router = express.Router();
 
 router.get('/provinces', protect, getProvinces);

@@ -7,6 +7,7 @@ import {
 
 import { protect } from '../middleware/authMiddleware.js';
 
+
 const router = express.Router();
 
 router.post('/', addLocation); // device sends data

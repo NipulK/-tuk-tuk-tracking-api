@@ -17,6 +17,7 @@ router.post('/', protect, authorizeRoles('admin'), createVehicle);
 // Get all vehicles (all logged users)
 router.get('/', protect, getVehicles);
 
+
 // Get single vehicle
 router.get('/:id', protect, getVehicleById);
 
