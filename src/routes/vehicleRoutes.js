@@ -1,3 +1,15 @@
+import express from 'express';
+import { protect, authorizeRoles } from '../middleware/authMiddleware.js';
+import {
+	createVehicle,
+	getVehicles,
+	getVehicleById,
+	updateVehicle,
+	deleteVehicle
+} from '../controllers/vehicleController.js';
+
+const router = express.Router();
+
 /**
  * @swagger
  * /api/vehicles:
@@ -42,3 +54,5 @@ router.put('/:id', protect, authorizeRoles('admin'), updateVehicle);
  *     tags: [Vehicle]
  */
 router.delete('/:id', protect, authorizeRoles('admin'), deleteVehicle);
+
+export default router;

@@ -1,3 +1,13 @@
+import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import {
+	addLocation,
+	getLatestLocation,
+	getLocationHistory
+} from '../controllers/locationController.js';
+
+const router = express.Router();
+
 /**
  * @swagger
  * /api/location:
@@ -24,3 +34,5 @@ router.get('/latest/:vehicleId', protect, getLatestLocation);
  *     tags: [Location]
  */
 router.get('/history/:vehicleId', protect, getLocationHistory);
+
+export default router;

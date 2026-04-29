@@ -1,3 +1,13 @@
+import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import {
+	getProvinces,
+	getDistricts,
+	getPoliceStations
+} from '../controllers/masterDataController.js';
+
+const router = express.Router();
+
 /**
  * @swagger
  * /api/master-data/provinces:
@@ -33,3 +43,5 @@ router.get('/districts', protect, getDistricts);
  *         description: List of police stations
  */
 router.get('/police-stations', protect, getPoliceStations);
+
+export default router;
