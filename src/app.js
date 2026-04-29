@@ -6,8 +6,14 @@ import testRoutes from './routes/testRoutes.js';
 import masterDataRoutes from './routes/masterDataRoutes.js';
 import vehicleRoutes from './routes/vehicleRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
+// Swagger setup
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger.js';
 
 const app = express();
+
+// Serve Swagger API documentation at /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json());
 app.use(cors());
