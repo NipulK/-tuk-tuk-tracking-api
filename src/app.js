@@ -7,7 +7,6 @@ import masterDataRoutes from './routes/masterDataRoutes.js';
 import vehicleRoutes from './routes/vehicleRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
 
-
 const app = express();
 
 app.use(express.json());
